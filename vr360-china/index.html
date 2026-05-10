@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="自然风光 VR360 全景游览 - 身临其境感受世界各地的壮美风光">
+  <title>VR360 · 自然风光全景</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ==================== 语言切换 ==================== -->
+  <div id="lang-switcher">
+    <button class="lang-option active" data-lang="zh" title="中文">中</button>
+    <button class="lang-option" data-lang="ja" title="日本語">日</button>
+    <button class="lang-option" data-lang="en" title="English">EN</button>
+  </div>
+
+  <!-- ==================== 首页 ==================== -->
+  <div id="home-page">
+    <div class="home-bg">
+      <div class="home-mountains">
+        <div class="home-mountain-1"></div>
+        <div class="home-mountain-2"></div>
+        <div class="home-mountain-3"></div>
+      </div>
+      <div class="home-mist"></div>
+      <div class="home-water"></div>
+      <div class="home-birds">
+        <span>︿ ︿</span>
+        <span style="font-size:10px;opacity:0.5">︿ ︿ ︿</span>
+      </div>
+    </div>
+    <div class="home-header">
+      <h1 class="home-title">
+        <span class="title-icon">🌍</span>
+        自然风光
+        <span class="title-accent">VR360</span>
+        全景
+      </h1>
+      <p class="home-subtitle">足不出户，身临其境感受世界各地的壮美风光</p>
+    </div>
+
+    <div class="home-content">
+      <!-- 景点轮播 -->
+      <div id="hero-carousel">
+        <div class="carousel-viewport">
+          <div class="carousel-track" id="carousel-track">
+            <!-- JS 动态生成幻灯片 -->
+          </div>
+        </div>
+        <!-- 轮播指示点 -->
+        <div class="carousel-dots" id="carousel-dots">
+          <!-- JS 动态生成 -->
+        </div>
+        <!-- 左右箭头 -->
+        <button class="carousel-arrow carousel-prev" id="carousel-prev" aria-label="上一个">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="13,2 6,10 13,18" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="carousel-arrow carousel-next" id="carousel-next" aria-label="下一个">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="7,2 14,10 7,18" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- 景点卡片网格 -->
+      <div id="spots-grid">
+        <!-- JS 动态生成 -->
+      </div>
+    </div>
+
+    <div class="home-footer">
+      <p>点击轮播图或下方卡片，开启 VR360 全景之旅</p>
+    </div>
+  </div>
+
+  <!-- ==================== VR 全景页面（默认隐藏） ==================== -->
+  <div id="vr-page" class="hidden">
+    <!-- VR 全景渲染容器 -->
+    <div id="vr-container"></div>
+
+    <!-- 加载遮罩 -->
+    <div id="loading-overlay" class="visible">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">加载全景中</div>
+      <div class="progress-track">
+        <div id="progress-bar"></div>
+      </div>
+    </div>
+
+    <!-- 景点信息面板 -->
+    <div id="info-panel">
+      <div class="info-badge">VR 全景</div>
+      <div id="spot-name">山间晨曦</div>
+      <div id="spot-location">群山之巅</div>
+      <div id="spot-description">清晨第一缕阳光洒落山峦，云海翻涌于山谷之间，远山如黛，层峦叠嶂，天地之间一派壮阔景象。</div>
+    </div>
+
+    <!-- 控制按钮 -->
+    <div id="toggle-bar">
+      <button class="ctrl-btn active" id="btn-auto-rotate" title="关闭自动旋转">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="8" cy="8" r="6"/>
+          <path d="M8 2a6 6 0 0 1 5 3" stroke-linecap="round"/>
+          <polyline points="13,3 13,6 10,6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn" id="btn-fullscreen" title="全屏模式">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polyline points="2,6 2,2 6,2"/>
+          <polyline points="10,2 14,2 14,6"/>
+          <polyline points="14,10 14,14 10,14"/>
+          <polyline points="6,14 2,14 2,10"/>
+        </svg>
+      </button>
+      <button class="ctrl-btn" id="btn-gyroscope" title="开启陀螺仪">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="10" height="10" rx="2"/>
+          <circle cx="8" cy="8" r="1.5"/>
+          <line x1="8" y1="5.5" x2="8" y2="3" stroke-linecap="round"/>
+          <line x1="8" y1="13" x2="8" y2="10.5" stroke-linecap="round"/>
+          <line x1="5.5" y1="8" x2="3" y2="8" stroke-linecap="round"/>
+          <line x1="13" y1="8" x2="10.5" y2="8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- 操作提示 -->
+    <div class="hint-text">拖拽旋转 · 滚轮缩放 · 点击下方缩略图切换景点</div>
+
+    <!-- 底部景点画廊 -->
+    <div id="gallery-panel">
+      <div class="gallery-scroll" id="thumbnails-container">
+        <!-- JS 动态生成缩略图 -->
+      </div>
+    </div>
+
+    <!-- 返回首页按钮 -->
+    <button id="btn-back" title="返回首页">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polyline points="10,2 4,8 10,14" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Three.js Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <!-- 应用入口 -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
